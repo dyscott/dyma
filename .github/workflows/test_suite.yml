@@ -1,0 +1,27 @@
+name: Dyma Tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  Build_and_Test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install build dependencies
+      run: sudo apt-get update && sudo apt-get -y install build-essential
+
+    - name: Download and install criterion
+      run: sudo apt-get install libcriterion-dev
+
+    - name: Clean bin and make
+      run: make clean all -C . && echo "build done"
+  
+    - name: Run Test Cases
+      run: bin/dyma_tests -S --verbose=0 --timeout 30
